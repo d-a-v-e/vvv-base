@@ -83,6 +83,7 @@ class Site implements ConfigurationInterface
                         ->booleanNode('delete_default_plugins')->defaultFalse()->end()
                         ->booleanNode('delete_default_themes')->defaultFalse()->end()
                         ->scalarNode('wp_content')->defaultNull()->end()
+                        ->scalarNode('live_assets_url')->defaultNull()->end()
                         ->booleanNode('wp')->defaultTrue()->end()
                         ->booleanNode('download_wp')->defaultTrue()->end()
                         ->scalarNode('htdocs')->defaultNull()->end()

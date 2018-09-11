@@ -253,6 +253,8 @@ class Provisioner
         $provision_dir = dirname(__DIR__) . '/provision';
         $config        = "{$provision_dir}/vvv-nginx.conf";
         $template      = "{$provision_dir}/vvv-nginx.template";
+        $loc_template  = "{$provision_dir}/vvv-nginx-locations.template";
+        $loc_contents  = "";
         $contents      = !file_exists($config) ? file_get_contents($template) : file_get_contents($config);
 
         // Build the hosts directive, maybe including xipio.
@@ -263,6 +265,11 @@ class Provisioner
             $nginx_hosts .= " {$xipio_host}";
         }
 
+        // if live assets url is found in config, write locations rule to nginx
+        if (isset($this->site['live_assets_url'])) {
+            $loc_contents = str_replace('{live_url}', $this->site['live_assets_url'], file_get_contents($loc_template));
+        }
+
         // If the hosts string is found in the file contents, don't try to replace it.
         if (false !== strpos($contents, $nginx_hosts)) {
             return;
@@ -270,6 +277,7 @@ class Provisioner
 
         $contents = preg_replace('#(server_name\s*)(?:[^;]*);#', "\$1{$nginx_hosts};", $contents);
         $contents = str_replace('{wp_main_host}', $this->site['main_host'], $contents);
+        $contents = str_replace('{live_assets}', $loc_contents, $contents);
         file_put_contents($config, $contents);
     }
 

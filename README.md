@@ -32,6 +32,7 @@ sites:
             db_prefix: ex_
             multisite: false
             xipio: true
+            live_assets_url: livesite.com
             version: latest
             locale: en_US
             plugins:
